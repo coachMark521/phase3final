@@ -28,6 +28,15 @@ async function getCustomers() {
     
 }
 
+async function findCustomers(filter) {
+  try {
+    const customers = await collection.find(filter).toArray();
+    return [customers,null];
+  } catch (err) {
+    return [null, err.message];
+  }
+}
+
 async function resetCustomers() {
     let data = [
         { "id": 0, "name": "Mary Jackson", "email": "maryj@abc.com", "password": "maryj" },
@@ -52,7 +61,6 @@ async function addUniqueCustomer(newCustomer) {
         //bring in the information for new customer
         const value = newCustomer.email;
         console.log(value);
-        console.log(collection);
         if (isUniqueValue(collection, value)) {
             // return array [status, id, errMessage]
             console.log('This is a unique email address insert allowed')
@@ -121,18 +129,6 @@ async function deleteCustomerById(id) {
     }
     catch {
         console.log('At Catch', err.message);
-        return [null, err.message];
-    }
-}
-
-async function findCustomers(filterObject){
-    try {
-        const customers = await collection.find(filterObject).toArray();
-        if(!customers || customers.length == 0){
-            return[null, "no customers were found"]
-        }
-    } catch (err) {
-        console.log(err.message);
         return [null, err.message];
     }
 }

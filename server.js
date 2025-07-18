@@ -40,8 +40,8 @@ app.get("/customers/find", async (req, res) => {
 
   let filter = {};
   filter[key] = key === "id" ? parseInt(value) : value;
-
-  const [customers, err] = await da.getCustomers(filter);
+  
+  const [customers, err] = await da.findCustomers(filter);
   if (customers && customers.length > 0) {
     res.send(customers);
   } else {
