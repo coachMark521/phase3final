@@ -53,9 +53,12 @@ async function addUniqueCustomer(newCustomer) {
     try {
         //bring in the information for new customer
         const email = req.body.email;
+        console.log('email = ', email)
         const value = req.body.email.value;
+        console.log('value = ', value)
         if (isUniqueValue(dbName, collectionName, email, value)) {
             // return array [status, id, errMessage]
+            console.log('This is a unique email address insert allowed')
             const insertResult = await collection.insertOne(newCustomer);
             return ["success", insertResult.insertedId, null];
         }else{
