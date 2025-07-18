@@ -9,9 +9,15 @@
   </head>
   <body>
     <main>
-        <h1>Welcome to the Customer API server!</h1>  
-        <p>Click <a href="/customers?API_KEY=secretPassword1" >here</a> for Customers</p><br/>
-        <p>Click <a href="/reset?API_KEY=secretPassword1" >here</a> for Data Reset</p>
+      <div class="workspace">
+        <h1>Welcome to the Customer API server!</h1>  <br/>
+        <a href="/customers?API_KEY=secretPassword1" >
+          <button class="button">customers</button>
+        </a>  
+        <a href="/reset?API_KEY=secretPassword1" >
+          <button class="button">reset</button>
+        </a>
+      </div>  
     </main>
     <script src="index.js"></script>
   </body>
