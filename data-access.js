@@ -49,7 +49,7 @@ async function resetCustomers() {
     }
 }
 
-async function addCustomer(newCustomer) {
+async function addUniqueCustomer(newCustomer) {
     try {
         //bring in the information for new customer
         const email = req.collection.email;
@@ -62,6 +62,17 @@ async function addCustomer(newCustomer) {
             return [null, "Failed insert: email is already in use by a customer"];
         }
 
+    } catch (err) {
+        console.log(err.message);
+        return ["fail", null, err.message];
+    }
+}
+
+async function addCustomer(newCustomer) {
+    try {
+        const insertResult = await collection.insertOne(newCustomer);
+        // return array [status, id, errMessage]
+        return ["success", insertResult.insertedId, null];
     } catch (err) {
         console.log(err.message);
         return ["fail", null, err.message];
