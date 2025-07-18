@@ -17,6 +17,38 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
+app.get("/customers/find", async (req, res) => {
+  const keys = Object.keys(req.query);
+
+  if (keys.length === 0) {
+    return res.status(400).send("query string is required");
+  }
+
+  if (keys.length > 1) {
+    return res.status(400).send("only one query parameter allowed");
+  }
+
+  const key = keys[0];
+  const value = req.query[key];
+
+  const validKeys = ["id", "email", "password"];
+  if (!validKeys.includes(key)) {
+    return res
+      .status(400)
+      .send("name must be one of the following (id, email, password)");
+  }
+
+  let filter = {};
+  filter[key] = key === "id" ? parseInt(value) : value;
+
+  const [customers, err] = await da.getCustomers(filter);
+  if (customers && customers.length > 0) {
+    res.send(customers);
+  } else {
+    res.status(404).send("no matching customer documents found");
+  }
+});
+
 app.get("/customers", sec.checkHeaderAuth, async (req, res) => {
     const [cust, err] = await da.getCustomers();
     if(cust){
@@ -101,27 +133,3 @@ app.delete('/customers/:id', sec.checkHeaderAuth, async (req, res) => {
     }
 });
 
-app.get('/customers/find', async (req, res) => {
-    let id = +req.query.id;
-    let email = req.query.email;
-    let password = req.query.password;
-    let query = null;
-
-    if (id > -1){
-        query = {"id": +id};
-    }else if (email){
-        query = {"email": email};
-    }else if (password){
-        query = {"password": password}
-    }
-
-    if  (query) {
-        const [customers, err] = await da.findCustomers(query);
-        if (customers) {
-            res.send(customers);
-        } else {
-            res.status(404);
-            res.send(err);
-        }
-    }
-});

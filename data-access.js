@@ -12,12 +12,10 @@ async function dbStartup() {
     collection = client.db(dbName).collection(collectionName);
 }
 
-async function isUniqueValue(dbName, collectionName, fieldName, value) {
-  const collection = dbName.collection(collectionName);
-  const existing = await collection.findOne({ [fieldName]: value });
+async function isUniqueValue(collection, value) {
+  const existing = await collection.findOne({ "email": value });
   return !existing; // true if unique, false if duplicate
 }
-
 
 async function getCustomers() {
     try {
@@ -52,11 +50,10 @@ async function resetCustomers() {
 async function addUniqueCustomer(newCustomer) {
     try {
         //bring in the information for new customer
-        const email = req.body.email;
-        console.log('email = ', email)
-        const value = req.body.email.value;
-        console.log('value = ', value)
-        if (isUniqueValue(dbName, collectionName, email, value)) {
+        const value = newCustomer.email;
+        console.log(value);
+        console.log(collection);
+        if (isUniqueValue(collection, value)) {
             // return array [status, id, errMessage]
             console.log('This is a unique email address insert allowed')
             const insertResult = await collection.insertOne(newCustomer);
