@@ -52,8 +52,8 @@ async function resetCustomers() {
 async function addUniqueCustomer(newCustomer) {
     try {
         //bring in the information for new customer
-        const email = req.collection.email;
-        const value = req.collection.email.value;
+        const email = req.body.email;
+        const value = req.body.email.value;
         if (isUniqueValue(dbName, collectionName, email, value)) {
             // return array [status, id, errMessage]
             const insertResult = await collection.insertOne(newCustomer);
@@ -146,5 +146,6 @@ module.exports = {
     getCustomerById,
     updateCustomer,
     deleteCustomerById,
-    findCustomers
+    findCustomers,
+    addUniqueCustomer
  };
