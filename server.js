@@ -44,7 +44,8 @@ app.post('/customers', sec.checkHeaderAuth, async (req, res) => {
         res.send("missing request body");    
     }else {
         // return array format [status, id, errMessage]
-        const [status, id, errMessage] = await da.addUniqueCustomer(newCustomer);
+        //const [status, id, errMessage] = await da.addUniqueCustomer(newCustomer);
+        const [status, id, errMessage] = await da.addCustomer(newCustomer);
         if (status === "success") {
             res.status(201);
             let response = { ...newCustomer };
