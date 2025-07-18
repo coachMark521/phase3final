@@ -12,11 +12,6 @@ async function dbStartup() {
     collection = client.db(dbName).collection(collectionName);
 }
 
-async function isUniqueValue(collection, value) {
-  const existing = await collection.findOne({ "email": value });
-  return !existing; // true if unique, false if duplicate
-}
-
 async function getCustomers() {
     try {
         const customers = await collection.find().toArray();
@@ -56,28 +51,13 @@ async function resetCustomers() {
     }
 }
 
-async function addUniqueCustomer(newCustomer) {
-    try {
-        //bring in the information for new customer
-        const value = newCustomer.email;
-        console.log(value);
-        if (isUniqueValue(collection, value)) {
-            // return array [status, id, errMessage]
-            console.log('This is a unique email address insert allowed')
-            const insertResult = await collection.insertOne(newCustomer);
-            return ["success", insertResult.insertedId, null];
-        }else{
-            return [null, "Failed insert: email is already in use by a customer"];
-        }
-
-    } catch (err) {
-        console.log(err.message);
-        return ["fail", null, err.message];
-    }
-}
-
 async function addCustomer(newCustomer) {
     try {
+        const existingCustomer = await collection.findOne({"email": newCustomer.email});
+        if (existingCustomer) {
+            // return array [status, id, errMessage]
+            return ["failure", null, "Customer with this email already exists"];
+        }
         const insertResult = await collection.insertOne(newCustomer);
         // return array [status, id, errMessage]
         return ["success", insertResult.insertedId, null];
@@ -142,6 +122,5 @@ module.exports = {
     getCustomerById,
     updateCustomer,
     deleteCustomerById,
-    findCustomers,
-    addUniqueCustomer
+    findCustomers
  };

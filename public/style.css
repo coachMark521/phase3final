@@ -33,3 +33,8 @@ h1 {
   border: 5px solid black;
   padding: 5px;
 }
+
+#searchInput {
+  display: none; /* Initially hidden */
+  margin-top: 10px;
+}

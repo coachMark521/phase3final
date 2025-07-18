@@ -17,9 +17,17 @@
         <a href="/reset?API_KEY=secretPassword1" >
           <button class="button">reset</button>
         </a>
-        <a href="/customers/find?" >
-          <button class="button">search</button>
-        </a>
+        
+        <button class="button" id="searchButton">search</button>
+        <div id="searchInput">
+          <label for="ID">ID:</label>
+          <input type="text" id="ID" placeholder="Enter Customer ID"><br/><br/>
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="Enter customer email"><br/><br/>
+          <a href="/customers/find?" >
+            <button class="button">Submit</button>
+          </a>
+        </div> 
       </div>  
     </main>
     <script src="index.js"></script>
